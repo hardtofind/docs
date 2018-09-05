@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Order Management - hardtofind</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Order Management";
+    var mkdocs_page_input_path = "order-management.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> hardtofind</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../introduction/">Introduction</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../authentication/">Authentication</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../general/">General Usage</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../batch/">Batch Operations</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Order Management</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#order-management">Order Management</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#standard-order-structure">Standard Order structure</a></li>
+        
+            <li><a class="toctree-l3" href="#order-states">Order States</a></li>
+        
+            <li><a class="toctree-l3" href="#get-orders">GET /orders</a></li>
+        
+            <li><a class="toctree-l3" href="#get-orderid">GET /order/{id}</a></li>
+        
+            <li><a class="toctree-l3" href="#post-orderidtransition">POST /order/{id}/transition</a></li>
+        
+            <li><a class="toctree-l3" href="#get-shipping-providers">GET /shipping-providers</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../giftcards/">Giftcards</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">hardtofind</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Order Management</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="order-management">Order Management</h1>
+<aside class="warning">
+Although the API enables you to easily import Order data into your in-house system, it is still a requirement that
+you include an official hardtofind packing slip within each of your shipments.
+
+A direct download link is provided within the <code>_links.packing_slip</code> element to allow you to download the PDF packing slip directly.
+</aside>
+
+<h2 id="standard-order-structure">Standard Order structure</h2>
+<pre><code class="json">{
+    &quot;id&quot;: &quot;123456&quot;,
+    &quot;status&quot;: &quot;READY&quot;,
+    &quot;_links&quot;: {
+        &quot;self&quot;: &quot;https://api.hardtofind.com.au/order/123456&quot;,
+        &quot;manage&quot;: &quot;https://www.hardtofind.com.au/mfadmin/sales_order_part/view/123456&quot;,
+        &quot;packing_slip&quot;: &quot;https://api.hardtofind.com.au/order/123456/packing-slip&quot;
+    },
+    &quot;dates&quot;: {
+        &quot;created_at&quot;: &quot;2016-08-18T14:43:22+1000&quot;,
+        &quot;updated_at&quot;: &quot;2016-08-18T14:43:22+1000&quot;,
+        &quot;dispatch_due_at&quot;: &quot;2016-08-23T12:18:00+1000&quot;
+    },
+    &quot;payment_summary&quot;: {
+        &quot;price&quot;: 99.95,
+        &quot;shipping&quot;: 0,
+        &quot;value_addition&quot;: 0,
+        &quot;discount&quot;: 0,
+        &quot;credit&quot;: 0,
+        &quot;payment&quot;: 99.95,
+        &quot;total&quot;: 99.95
+    },
+    &quot;lines&quot;: [
+        {
+            &quot;description&quot;: &quot;Product title here&quot;,
+            &quot;price&quot;: 99.95,
+            &quot;product_id&quot;: &quot;111&quot;,
+            &quot;quantity&quot;: 1,
+            &quot;sku&quot;: &quot;SKU-111&quot;,
+            &quot;variant_data&quot;: [
+                {
+                    &quot;label&quot;: &quot;Clothing size&quot;,
+                    &quot;value&quot;: &quot;XL&quot;
+                }
+            ],
+            &quot;personalisations&quot;: [
+                {
+                    &quot;label&quot;: &quot;First personalisation&quot;,
+                    &quot;value&quot;: &quot;Something personal&quot;
+                },
+                {
+                    &quot;label&quot;: &quot;Second personalisation&quot;,
+                    &quot;value&quot;: &quot;Something even more personal&quot;
+                }
+            ]
+        }
+    ],
+    &quot;gift_wrapping&quot;: {
+        &quot;description&quot;: &quot;Free gift wrap with personal message&quot;,
+        &quot;message&quot;: &quot;Have a lovely time!&quot;,
+        &quot;price&quot;: 0,
+        &quot;quantity&quot;: 1
+    },
+    &quot;shipping&quot;: {
+        &quot;address&quot;: {
+            &quot;first_name&quot;: &quot;Tim&quot;,
+            &quot;last_name&quot;: &quot;Massey&quot;,
+            &quot;line_one&quot;: &quot;12 Address Street&quot;,
+            &quot;line_two&quot;: &quot;&quot;,
+            &quot;suburb&quot;: &quot;Suburbia&quot;,
+            &quot;state&quot;: &quot;ACT&quot;,
+            &quot;postcode&quot;: &quot;1001&quot;,
+            &quot;country&quot;: &quot;Australia&quot;,
+            &quot;company&quot;: &quot;Company Name&quot;
+        },
+        &quot;method&quot;: {
+            &quot;description&quot;: &quot;Shipping - FREE standard shipping&quot;,
+            &quot;price&quot;: 0,
+            &quot;quantity&quot;: 1
+        },
+        &quot;instructions&quot;: &quot;If no-one home - please leave on front step.&quot;
+    },
+    &quot;shipments&quot;: [
+        {
+            &quot;shipment_date&quot;: &quot;2016-09-08T14:57:37+1000&quot;,
+            &quot;tracking_number&quot;: &quot;TRACK-1234&quot;,
+            &quot;shipping_provider_name&quot;: &quot;Provider Name Here&quot;
+        }
+    ]
+}
+</code></pre>
+
+<p>The JSON structure to the right is a representation of an Order within the system and should provide you with all the data
+necessary to fulfill the order.</p>
+<h2 id="order-states">Order States</h2>
+<p>The available Order states within hardtofind.com.au are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Order State</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READY</td>
+<td>The Order has been paid for fully and is awaiting fulfillment by the Seller</td>
+</tr>
+<tr>
+<td>PROCESSED</td>
+<td>The Order has been picked up by the Seller and is undergoing fulfillment</td>
+</tr>
+<tr>
+<td>SHIPPED</td>
+<td>The Order items have been fully shipped by the Seller.</td>
+</tr>
+<tr>
+<td>RETURNED</td>
+<td>The Order has been returned in full</td>
+</tr>
+<tr>
+<td>REFUNDED</td>
+<td>The Order has had the monies refunded to the Shopper</td>
+</tr>
+<tr>
+<td>CANCELLED</td>
+<td>The Order has been cancelled by the Customer Support team and the finances manually corrected.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="get-orders">GET /orders</h2>
+<p>To view a list of Orders use this endpoint. It is possible to filter the list based on the following query string parameters.</p>
+<p>By default the status of <code>PENDING</code> will be returned. Orders are ordered by last updated date (descending), most recently updated first.</p>
+<p>Orders will be returned using the standard paged data structure as outlined <a href="#paged-data-pagination">here</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Query parameter</th>
+<th>Available options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>status</td>
+<td>One of the status listed <a href="#order-states">here</a></td>
+<td>When supplied, only orders matching the status will be returned.</td>
+</tr>
+<tr>
+<td>page_number</td>
+<td><code>[0-9]</code></td>
+<td>To be used for paging through large result sets</td>
+</tr>
+</tbody>
+</table>
+<h2 id="get-orderid">GET /order/{id}</h2>
+<p>To retrieve a specific Order, issue a GET request to this endpoint. The return structure will match the standard Order as outlined <a href="#order-management">here</a></p>
+<h2 id="post-orderidtransition">POST /order/{id}/transition</h2>
+<pre><code class="json">{
+    &quot;action&quot;: &quot;&lt;action name&gt;&quot;,
+    &quot;data&quot;:{}
+}
+</code></pre>
+
+<p>To move an order through its lifecycle, create a transition using this endpoint.</p>
+<p>Available actions are:</p>
+<ul>
+<li>process</li>
+<li>ship</li>
+</ul>
+<h3 id="process-transition">Process transition</h3>
+<pre><code class="json">{
+    &quot;action&quot;: &quot;process&quot;
+}
+</code></pre>
+
+<p>The process transition only requires an action property of process.</p>
+<h3 id="ship-transition">Ship transition</h3>
+<pre><code class="json">{
+    &quot;action&quot;: &quot;ship&quot;,
+    &quot;data&quot;:{
+        &quot;tracking_number&quot;: &quot;TRACK-123456&quot;,
+        &quot;shipping_provider_name&quot;: &quot;Royal Mail&quot;,
+        &quot;shipment_date&quot;: &quot;2016-09-15T14:41:25+1000&quot;
+    }
+}
+</code></pre>
+
+<p>The structure of a shipment transition requires an action of ship and the data contains the shipment provider and tracking information. For a list of valid shipping providers please use <code>GET /shipping-providers</code></p>
+<h2 id="get-shipping-providers">GET /shipping-providers</h2>
+<p>To retrieve a list of the current Shipping Providers, issue a GET request to this endpoint. A listing of the current providers will be returned as follows.</p>
+<pre><code class="json">[
+    {
+        &quot;id&quot;: &quot;8&quot;,
+        &quot;provider_name&quot;: &quot;Royal Mail&quot;,
+        &quot;tracking_url&quot;: &quot;https://www.royalmail.com/track-your-item&quot;,
+        &quot;accepts_tracking_id_in_url&quot;: false
+    }
+]
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../giftcards/" class="btn btn-neutral float-right" title="Giftcards">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../batch/" class="btn btn-neutral" title="Batch Operations"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../batch/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../giftcards/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
